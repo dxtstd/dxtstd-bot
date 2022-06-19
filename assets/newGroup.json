@@ -1,0 +1,10 @@
+{
+    "config": {
+        "greeting": {
+            "status": false,
+            "welcome": "Welcome  @user from @subject!",
+            "leave": "Goodbye @user from @subject"
+        },
+        "nsfw": false
+    }
+}

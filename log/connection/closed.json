@@ -1,0 +1,32 @@
+{
+	"connection": "close",
+	"lastDisconnect": {
+		"error": {
+			"data": {
+				"tag": "stream:error",
+				"attrs": {},
+				"content": [
+					{
+						"tag": "conflict",
+						"attrs": {
+							"type": "replaced"
+						},
+						"content": null
+					}
+				]
+			},
+			"isBoom": true,
+			"isServer": false,
+			"output": {
+				"statusCode": 410,
+				"payload": {
+					"statusCode": 410,
+					"error": "Gone",
+					"message": "Stream Errored"
+				},
+				"headers": {}
+			}
+		},
+		"date": "2022-03-22T16:45:59.643Z"
+	}
+}
