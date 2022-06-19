@@ -1,52 +1,37 @@
-<head>
-    <a href="https://github.com/DentaCH/dxtstd-bot">
-        <img src="../../blob/assets/banner.jpg"> </img>
-    </a>
-</head>
-<body>
+# dxtstd-bot
 
-Bot WhatsApp TypeScript  
-Thx for [@adiwajshing](https://github.com/adiwajshing) for [baileys module](https://github.com/adiwajshing/baileys)
+# Installation
 
---------
-
-## Ubuntu/Termux
-if using termux, maybe multiple plugins it's disabled
-
-### Install
-
-```bash
-git clone https://github.com/DentaCH/dxtstd-bot
-cd dxtstd-bot
-bash install.sh
+## Termux
+```cmd
+> pkg update && pkg upgrade
+> pkg install git -y
+> pkg install nodejs -y
+> pkg install ffmpeg -y
 ```
 
-### Run
-```bash
-npm start
+## Cloning this repo
+```cmd
+> git clone https://github.com/DentaStudio/dxtstd-bot.git
+> cd dxtstd-bot
 ```
 
---------
-<!---
-## Windows
-
-### Install
-* Install [`NodeJS`](https://nodejs.org/en/download)
-* Install [`FFmpeg`](https://ffmpeg.org/download.html) (**Don't Forget Add FFmpeg to PATH enviroment variables**)
+## Install the package
+```cmd
+> npm i
 ```
-npm install -g ts-node nodemon
-git clone https://github.com/DentaCH/dxtstd-bot
-cd dxtstd-bot
-npm install
-npm start
 
+## Edit config file
+Edit the required value in `config.json`.
+```json
+{
+    "prefix": "%",
+    "owner": "6281234567890",
+    "botname": "dxtstd-bot"
+}
 ```
---------
---->
 
-
-[![DentaCH](https://github.com/DentaCH.png?size=100)](https://github.com/DentaCH) | [![Fauzan](https://github.com/Fau-Zan.png?size=100)](https://github.com/Fau-Zan) | [![Rizky](https://github.com/Rizxyu.png?size=100)](https://github.com/Rizxyu)
-----|----|----
-[DentaCH](https://github.com/DentaCH) | [Fauzan](https://github.com/Fau-Zan) | [Rizky](https://github.com/Rizxyu)
-Author/Creator | Contributor | Contributor 2nd
-</body>
+## Run the bot
+```cmd
+> npm start
+```
