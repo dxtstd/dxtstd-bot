@@ -1,0 +1,7 @@
+node_modules
+package-lock.json
+database
+tmp
+yarn.lock
+yarn-error.log
+a

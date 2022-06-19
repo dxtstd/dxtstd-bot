@@ -1,0 +1,15 @@
+{
+    "owner": {
+        "profile": {
+            "name": "DentaCH"
+        },
+        "NoPhone": "6288804280094",
+        "donate": {
+            "saweria": "https://saweria.co/dentach",
+            "paypal": "https://paypal.me/dentaft"
+        }
+    },
+    "timezone": "Asia/Makassar",
+    "website": "https://",
+    "prefix": "%"
+}
