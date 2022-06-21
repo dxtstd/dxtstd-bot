@@ -22,7 +22,7 @@ export async function ReceiverMessageHandler(chat: any, client: any, database: a
         chat = (new (SimpleChat as any)(chat, client)).messages[0];
         if (!chat.message) return;
         if (chat.key && chat.key.remoteJid == 'status@broadcast') return;
-        //if (chat.key.fromMe) return;
+
         
         await GroupHandler(chat, client, database)
         const data = SimpleData(chat, database);
@@ -47,7 +47,7 @@ export async function ReceiverMessageHandler(chat: any, client: any, database: a
             CommandHandler(client, { data, database })
         };
         
-        //console.log(data)
+
     } catch (error) {
         logger.error(error);
     };
