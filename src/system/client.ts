@@ -14,7 +14,8 @@ const startClient = function (opts: any={}) {
         auth: database.auth,
         printQRInTerminal: (opts.printQR ? true : false),
         version: DEFAULT_CONNECTION_CONFIG.version,
-        logger: logger
+        logger: logger,
+        browser: ['DXTSTD BOT', 'SAFARI', '8.1']
     })
     
     if (opts.bind) EventsHandler(client, database, opts)
