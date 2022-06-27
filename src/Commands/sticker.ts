@@ -1,8 +1,8 @@
 import * as util from 'util'
 import * as crypto from 'crypto'
 
-import { sticker } from '../lib'
-import { CommandType } from '../types'
+import { sticker } from '../Utils'
+import { CommandType } from '../Types'
 
 const command: CommandType = {} as CommandType
 command.default = async (client, { data, database }, logger) => {
@@ -78,7 +78,7 @@ command.need = {
 command.name = 'sticker'
 command.help = ['sticker'].map(v => v + ' ');
 command.category = 'utility'
-command.use = /^s(tic?ker)$/i;
+command.use = /^s(tic?ker)?$/i;
 
 //OPTION
 command.disable = {

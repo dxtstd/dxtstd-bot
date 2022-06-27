@@ -28,18 +28,19 @@ const USER = {
             last: ''
         }
     }
-}
+};
 
 const GROUP = {
+    gid: '',
     config: {
         greeting: {
             active: false,
-            welcome: 'Welcome @user, in group @subject!',
+            join: 'Welcome @user, in group @subject!',
             leave: 'Goodbye @user, from @subject'
         },
         nsfw: false
     }
-}
+};
 
 const CONFIG = {
     owner: {
@@ -57,10 +58,10 @@ const CONFIG = {
     },
     ReadOnly: false,
     QRImage: false
-}
+};
 
 export {
     USER,
     GROUP,
     CONFIG
-}
+};

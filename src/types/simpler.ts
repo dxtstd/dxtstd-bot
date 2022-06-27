@@ -4,12 +4,3 @@ export declare interface IsChatType {
     media: boolean;
     quoted: boolean;
 }
-
-export declare interface OptsDownload {
-    stream: true;
-    path: string;
-}
-
-export declare interface OptsResend {
-    remoteJid: string;
-}

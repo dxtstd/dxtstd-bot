@@ -1,5 +1,5 @@
-import { Commands } from "../command"
-import { logger } from "../../lib/logger"
+import { Commands } from '../command'
+import { logger } from '../../Utils'
 
 export async function CommandHandler (this: any, client, { data, database }) {
     const commands = new Commands()
@@ -25,7 +25,7 @@ export async function CommandHandler (this: any, client, { data, database }) {
     }
     
     if (command.permission.owner && !data.user.is.owner) {
-        let text = "You are not the owner!"
+        let text = 'You are not the owner!'
         client.sendMessage(data.from, { text: text }, { quoted: data.chat })
         return
     }

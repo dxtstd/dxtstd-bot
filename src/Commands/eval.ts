@@ -1,5 +1,5 @@
 import * as util from 'util'
-import { CommandType } from '../types'
+import { CommandType } from '../Types'
 
 const command: CommandType = {} as CommandType
 command.default = async (client, { data, database }, logger) => {
@@ -42,7 +42,7 @@ command.need = {
 command.name = 'eval'
 command.help = ['eval'].map(v => v + ' ');
 command.category = 'owner'
-command.use = /^ev$/i;
+command.use = /^ev(al)?$/;
 
 //OPTION
 command.disable = {

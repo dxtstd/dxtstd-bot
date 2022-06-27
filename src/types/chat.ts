@@ -1,5 +1,6 @@
 import { proto as WAProto } from "@adiwajshing/baileys"
-import { IsChatType, OptsDownload, OptsResend } from './simpler'
+import { IsChatType } from './simpler'
+import { OptsDownload, OptsResend } from './opts'
 
 export interface ChatType {
     key: WAProto.MessageKey;

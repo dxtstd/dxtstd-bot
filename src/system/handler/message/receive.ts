@@ -1,6 +1,6 @@
-import { SimpleChat, SimpleData } from '../../simpler';
+import { SimpleChat, SimpleData } from '../../Simpler';
 import { CommandHandler } from '../command';
-import { logger } from '../../../lib';
+import { logger } from '../../../Utils';
 import { GroupHandler } from '..'
 
 import chalk from 'chalk';
@@ -14,7 +14,7 @@ const coloringBGText = function (text: string, color: string) {
     return !color ? chalk.bgKeyword('white')(text) : chalk.bgKeyword(color)(text)
 };
 
-export async function ReceiverMessageHandler(chat: any, client: any, database: any) {
+export async function ReceiverMessageHandler (chat: any, client: any, database: any) {
     try {
         if (!chat) return;
         if (chat.type === 'append') return;
@@ -27,7 +27,7 @@ export async function ReceiverMessageHandler(chat: any, client: any, database: a
         await GroupHandler(chat, client, database)
         const data = SimpleData(chat, database);
         const fetchLog = function (object: any) {
-            let text = coloringText('"' + object.text.full + '"', 'white');
+            let text = coloringText('\"' + object.text.full + '\"', 'white');
             text += coloringText(' From: ', 'yellow');
             text += object.name.user;
             if (object.on.group) {

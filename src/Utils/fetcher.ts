@@ -3,17 +3,17 @@ import * as https from 'https'
 import * as http from 'http'
 
 const getBuffer = async(url, options) => {
+    options ? options : {}
     try {
-        options ? options : {}
         const res = await axios({
-            method: 'get',
+            method: 'GET',
             url,
             headers: {
                 'DNT': 1,
                 'Upgrade-Insecure-Request': 1
             },
-            ...options,
-            responseType: 'arraybuffer'
+            responseType: 'arraybuffer',
+            ...options
         })
         return res.data
     } catch (e) {
@@ -22,24 +22,22 @@ const getBuffer = async(url, options) => {
 }
 
 const getWeb = async function (url, options) {
-    let ress
+    options ? options : {}
     try {
-        options ? options : {}
         const res = await axios({
             url,
             ...options
         })
-        ress = res.data
+        return res.data
     } catch (e) {
         console.log(e)
-        ress = JSON.parse(JSON.stringify(e, null, '\t'))
-    } finally {
-        return ress
+        return JSON.parse(JSON.stringify(e, null, '\t'))
     }
 };
 
 
 const getJSON = async function (url, options) {
+    options ? options : {}
     let res;
     try {
         res = await axios({

@@ -1,2 +1,2 @@
-//export * from './delete'
-export * from './receive'
+//export * from './delete';
+export * from './receive';

@@ -1,3 +1,5 @@
+import { AuthenticationState } from "@adiwajshing/baileys"
+
 export interface UserType {
     id: string;
     uid: string;
@@ -40,7 +42,7 @@ export interface UserType {
 
 export interface GroupType {
     id: string;
-    gid: number;
+    gid: string;
     subject: string;
     creation: number;
     desc: string;
@@ -52,12 +54,14 @@ export interface GroupType {
     config: {
         greeting: {
             active: boolean;
-            welcome: string;
+            join: string;
             leave: string;
         };
         nsfw: boolean;
     };
 }
+
+
 
 export interface DatabaseType {
     config: {
@@ -67,12 +71,12 @@ export interface DatabaseType {
             file: object;
         };
     };
-    auth: AuthenticationState,
+    auth: AuthenticationState;
     users: any;
     groups: any;
     store: any;
-    exist: (name: string='') => void;
-    make: (name: string='') => void;
-    load: (name: string='') => void;
-    save: (name: string='') => void;
+    exist: (name?: string) => void;
+    create: (name?: string) => void;
+    load: (name?: string) => void;
+    save: (name?: string) => void;
 }

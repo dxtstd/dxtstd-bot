@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os'
-import { logger } from '../lib/logger';
-import { CommandType } from '../types' 
+import { logger } from '../Utils';
+import { CommandType } from '../Types' 
 
 interface CategoryCommand {
     downloader: any;
@@ -18,7 +18,7 @@ interface ClassCommands {
     load: () => void
 }
 
-const COMMANDS_PATH = path.resolve(__dirname, '..', 'cmd/')
+const COMMANDS_PATH = path.resolve(__dirname, '..', 'Commands/')
 const DEVICE_OS = os.platform()
 const loader = function loader(this: ClassCommands) {
     const dir = fs.readdirSync(COMMANDS_PATH)

@@ -1,27 +1,28 @@
-import { DataType } from './data'
+import { DataType } from './data';
 
 export interface CommandType {
     default: (client: any, { data: DataType, database }, logger: any) => void;
     permission: {
-        owner: boolean;
         admin: {
             bot: boolean;
             normal: boolean;
             super: boolean;
         };
+        owner: boolean;
         premium: boolean;
         group: boolean;
         private: boolean;
     };
     need: {
-        register: boolean;
-        limit: {
-            amount: number;
-        };
+        //args: boolean;
         cash: {
             amount: number
         };
+        limit: {
+            amount: number;
+        };
         level: number;
+        register: boolean;
     };
     name: string;
     help: Array<string>;
@@ -37,4 +38,4 @@ export interface CommandType {
         linux: boolean;
         windows: boolean
     }
-}
+};

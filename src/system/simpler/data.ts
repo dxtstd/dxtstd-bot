@@ -1,10 +1,13 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { DataType, Text } from "../../types"
+import { DataType, Text } from "../../Types"
+import { Database } from '../database'
 
 export function SimpleData (this: any, chat: any, database)  {
-    database.load()
+    const db = new Database(database.config.db.name)
+    db.load()
+    
     const data: DataType = {} as DataType
     //data['data'] = data
     data['chat'] = chat;
@@ -20,9 +23,9 @@ export function SimpleData (this: any, chat: any, database)  {
     }
     data['sender'] = data.on.group ? chat.key.participant : chat.key.remoteJid
     
-    data['group'] = data.on.group ? (database.groups[data.from] || {}) : {}
+    data['group'] = data.on.group ? (db.groups[data.from] || {}) : {}
 
-    data['user'] = database.users[data.sender] || {}
+    data['user'] = db.users[data.sender] || {}
     
     data['user']['is'] = {
         owner: false,

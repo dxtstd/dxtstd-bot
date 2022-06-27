@@ -1,8 +1,11 @@
-import { spawn } from "child_process"
-import * as path from "path"
-import * as CFonts from "cfonts"
-import * as fs from "fs"
-import { logger } from "./src/lib/logger"
+import { spawn } from 'child_process'
+import * as path from 'path'
+import * as fs from 'fs'
+import * as os from 'os'
+
+import * as CFonts from 'cfonts'
+
+import { logger } from './src/Utils'
 
 const packageJSON = JSON.parse(String(fs.readFileSync('./package.json')))
 
@@ -20,6 +23,12 @@ CFonts.say(`'${packageJSON.name}' By @${packageJSON.author.name || packageJSON.a
 
 let AutoRestart = false
 let IsRunning = false
+
+
+logger.info({
+    OS: os.platform(),
+    Arch: os.arch()
+}, 'Detected System')
 
 /**
  * Start a ts file
@@ -42,7 +51,7 @@ const start = function (file: string, opts: object={}) {
         }
     })
     
-    logger.info("starting ts-node %s", args[0])
+    logger.info('starting ts-node %s', args[0])
     
     const node = spawn(process.argv[0], args, {
         stdio: ['inherit', 'inherit', 'inherit', 'ipc']
@@ -78,4 +87,4 @@ const start = function (file: string, opts: object={}) {
     })
 }
 
-start('./src/system/index.ts')
+start('./src/index.ts')

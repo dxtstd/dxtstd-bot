@@ -17,7 +17,7 @@ fi
 
 ### Package
 PACKAGE_ANDROID="nodejs wget curl git ffmpeg sox imagemagick";
-PACKAGE_LINUX="libreoffice wget curl git ffmpeg sox imagemagick gnome-screenshot"
+PACKAGE_LINUX="libreoffice wget curl git ffmpeg sox imagemagick gnome-screenshot xvfb"
 PACKAGES_ANDROID=(
     wget curl git ffmpeg sox magick
 )

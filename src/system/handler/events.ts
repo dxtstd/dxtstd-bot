@@ -1,6 +1,6 @@
 import { ReceiverMessageHandler, ContactsHandler } from './'
 import { startClient } from '../client'
-import { logger } from "../../lib"
+import { logger } from '../../Utils'
 
 import { Boom } from '@hapi/boom'
 

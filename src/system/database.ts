@@ -1,11 +1,17 @@
-import * as fs from "fs"
-import * as path from "path"
+import * as fs from 'fs'
+import * as path from 'path'
 
-import { logger } from "../lib";
-import { DatabaseType } from '../types'
-import { CONFIG } from './default'
+import { logger } from '../Utils';
+import { DatabaseType } from '../Types'
+import { CONFIG } from '../Defaults'
 
-import { AuthenticationState, useSingleFileAuthState, initAuthCreds, makeInMemoryStore, BufferJSON } from "@adiwajshing/baileys"
+import {
+    AuthenticationState,
+    BufferJSON,
+    initAuthCreds,
+    makeInMemoryStore,
+    useSingleFileAuthState
+} from '@adiwajshing/baileys'
 
 const PathDatabase = path.join(__dirname, '..', '..', 'database/')
 !fs.existsSync(PathDatabase) && fs.mkdirSync(PathDatabase)
@@ -56,7 +62,8 @@ const ExistDatabase = function (this: any, name: string='') {
     
     const PathDB = MakePathDatabase(name)
     return fs.existsSync(PathDB.dir)
-}
+};
+
 const CreateDatabase = function (this: any, name: string='') {
     if (this.exist(name)) { 
         logger.warn('This database has exists!');
@@ -66,7 +73,7 @@ const CreateDatabase = function (this: any, name: string='') {
     
     name = name || this.config.db.name || 'main'
     this.config.db.name = name
-    logger.info('Make database for "%s"...', name)
+    logger.info('Make database for \"%s\"...', name)
 
     const PathDB = MakePathDatabase(name)
     
@@ -87,7 +94,7 @@ const LoadDatabase = function (this: any, name: string='') {
     name = name || this.config.db.name || 'main';
     this.config.db.name = name
 
-    logger.debug('Load database "%s"...', name)
+    logger.debug('Load database \"%s\"...', name)
 
     if (!this.exist(name)) {
         logger.warn('This database doesn\'t exists!');
@@ -102,10 +109,10 @@ const LoadDatabase = function (this: any, name: string='') {
     
     Object.keys(PathDB.file).forEach((value) => {
         try {
-            if (value == "auth") {
-                if (!NotEmptyFile(PathDB.file[value])) return
+            if (value == 'auth') {
+                if (!NotEmptyFile(PathDB.file[value])) return;
                 this[value] = (useSingleFileAuthState(PathDB.file[value])).state;
-                if (!this[value].creds) this[value].creds = initAuthCreds()
+                if (!this[value].creds) this[value].creds = initAuthCreds();
             } else {
                 this[value] = NotEmptyFile(PathDB.file[value]) ? JSON.parse(String(fs.readFileSync(PathDB.file[value]))) : this[value]
             }
@@ -116,14 +123,14 @@ const LoadDatabase = function (this: any, name: string='') {
 }
 const SaveDatabase = function (this: any, name: string='') {
     name = name || this.config.db.name || 'main'
-    logger.debug('Save database "%s"...', name)
+    logger.debug('Save database \"%s\"...', name)
     
     const PathDB = MakePathDatabase(name);
     
     Object.keys(PathDB.file).forEach((value) => {
         try {
             if (NotEmptyJSON(this[value])) {
-                if (value == "auth") {
+                if (value == 'auth') {
                     fs.writeFileSync(PathDB.file[value], Stringify(this[value], BufferJSON.replacer))
                 } else {
                     fs.writeFileSync(PathDB.file[value], Stringify(this[value]))
@@ -182,4 +189,3 @@ export class Database {
         this.backup.auto = AutoBackupDatabase;
     }
 }
-

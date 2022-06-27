@@ -1,7 +1,7 @@
 import { downloadMediaMessage, proto } from "@adiwajshing/baileys"
 import * as fs from "fs"
 
-import { IsChatType, ChatType } from "../../types"
+import { IsChatType, ChatType } from "../../Types"
 
 const isMedia = function (type: string) {
     const MEDIA = {

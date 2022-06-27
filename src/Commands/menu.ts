@@ -2,8 +2,8 @@ import * as util from 'util'
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { Commands } from '../system/command'
-import { CommandType } from '../types'
+import { Commands } from '../System/command'
+import { CommandType } from '../Types'
 
 const MakeMenu = function () {
     return {
@@ -57,13 +57,15 @@ command.default = async (client, { data, database }, logger) => {
             let ContentsMenu: string = ''
             let SubMenu = commands.category[data.text.args[0]]
             if (!SubMenu) {
-                client.sendMessage(data.from, { text: `Submenu '${data.text.args[0]}' not available in main menu` }, { quoted: data.chat })
+                client.sendMessage(data.from, { text: `Submenu "${data.text.args[0]}" not available in main menu` }, { quoted: data.chat })
                 return
             }
             MENU.header += '*Category:* ' + (data.text.args[0]).toUpperCase() + '\n'
             
-            Object.keys(SubMenu).forEach(v => {
-                ContentsMenu += '> ' + (database.config.prefix || '%') + SubMenu[v].help[0] + '\n'
+            Object.keys(SubMenu).forEach(cmd => {
+                SubMenu[cmd].help.forEach(help => {
+                    ContentsMenu += '> ' + (database.config.prefix) + help + '\n'
+                })
             })
             
             ContentsMenu = ContentsMenu.trimEnd()
