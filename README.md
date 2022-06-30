@@ -1,6 +1,6 @@
 <head>
     <a href="https://github.com/DentaCH/dxtstd-bot">
-        <img src="../../blob/assets/banner.jpg"> </img>
+        <img src="https://raw.githubusercontent.com/DentaCH/dxtstd-bot/assets/banner.jpg"> </img>
     </a>
 </head>
 <body>
