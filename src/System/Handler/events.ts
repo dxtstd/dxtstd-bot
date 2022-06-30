@@ -7,7 +7,8 @@ import { Boom } from '@hapi/boom'
 export async function EventsHandler (client, database, opts: object={}) {
     const { ev, ws } = client;
     
-    ev.on('creds.update', () => {
+    ev.on('creds.update', (creds) => {
+        console.log(creds)
         database.load()
         database.auth = client.authState
         database.save()

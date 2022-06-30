@@ -5,7 +5,17 @@ import { GROUP } from '../../Defaults';
 
 import { GroupType } from '../../Types';
 
-export async function GroupHandler (chat, client, database) {
+/**
+ * Handler to refresh group data
+ * 
+ * @param chat - Message Received From Baileys
+ * @param client - Baileys WASocket
+ * @param database - Database Bot
+ */
+ 
+const GroupHandler = async function (
+    chat, client, database
+): Promise<void> {
     try {
         const data = SimpleData(chat, database);
         if (data.on.private) return;
@@ -44,10 +54,26 @@ export async function GroupHandler (chat, client, database) {
     }
 };
 
-export async function GroupParticipantHandler (group, client, database) {
+/**
+ * Handler for group members
+ * 
+ *  
+ * @param client - Baileys WASocket
+ * @param database - Database Bot
+ * 
+ * 
+ */
+const GroupParticipantHandler = async function (
+    { id, participants, action }, client, database
+): Promise<void> {
     try {
-        
+        /* */
     } catch (error) {
-        
+        logger.error(error)
     }
 };
+
+export {
+    GroupHandler,
+    GroupParticipantHandler
+}

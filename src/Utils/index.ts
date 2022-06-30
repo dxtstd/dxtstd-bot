@@ -6,5 +6,6 @@ export * as magick from './magick'
 export * as sticker from './sticker'
 export * as stream from './stream'
 export * as tmp from './tmp'
+export * as ytdl from './ytdl'
 
 export * from './logger'

@@ -3,12 +3,27 @@ import { MakeTMPFile } from './tmp'
 
 
 const EffectSOX = {
-    reverb: ['gain', '-3', 'pad', '0', '4', 'reverb', '100', '100', '100', '100', '0', '6'],
+    reverb: ['gain',
+        '-3',
+        'pad',
+        '0',
+        '4',
+        'reverb',
+        '100',
+        '100',
+        '100',
+        '100',
+        '0',
+        '6'],
     reverse: ['reverse'],
-    slow: ['speed', '0.8'],
-    fast: ['speed', '1.2'],
-    chipmunk: ['pitch', '8'], 
-    deep: ['pitch', '-8']
+    slow: ['speed',
+        '0.8'],
+    fast: ['speed',
+        '1.2'],
+    chipmunk: ['pitch',
+        '8'],
+    deep: ['pitch',
+        '-8']
 }
 
 const EffectFFMPEG = {
@@ -17,82 +32,78 @@ const EffectFFMPEG = {
 }
 
 
-const processor = async function (input: any, opts: any) {
-    try {
-        const result = await new Promise(async (resolve, reject) => {
-            if (!input._readableState) reject(new Error('The input must be a stream!'));
-            
-            let buffer = Buffer.from([])
-            
-            
-            const ffmpeg = spawn('ffmpeg', opts.ffmpeg.args.result())
-            let DataFFMpegStdErr = Buffer.from([])
-            let ffmpegClose: boolean;
-            let ffmpegCodeExit: number|null;
-            
-            const sox = spawn('sox', opts.sox.args.result())
-            let DataSoxStdErr = Buffer.from([])
-            let soxClose: any;
-            let soxCodeExit: number|null;
-            
-            
-            /*
+const processor = async function (input: any, opts: any): Promise < any > {
+    const result = await new Promise((resolve, reject) => {
+        if (!input._readableState) reject(new Error('The input must be a stream!'));
+
+        let buffer = Buffer.from([])
+
+
+        const ffmpeg = spawn('ffmpeg', opts.ffmpeg.args.result())
+        let DataFFMpegStdErr = Buffer.from([])
+        let ffmpegClose: boolean;
+        let ffmpegCodeExit: number|null;
+
+        const sox = spawn('sox', opts.sox.args.result())
+        let DataSoxStdErr = Buffer.from([])
+        let soxClose: any;
+        let soxCodeExit: number|null;
+
+
+        /*
                 stdio[0] = stdin
                 stdio[1] = stdout
                 stdio[2] = stderr
             */
-            
-            input.resume()
-            ffmpeg.stdio[1].resume()
-            
-            input.pipe(ffmpeg.stdio[0])
-            ffmpeg.stdio[1].pipe(sox.stdio[0])
-            
-            sox.stdio[1].on('data', (data) => {
-                buffer = Buffer.concat([buffer, data])
-            })
-            
-            ffmpeg.stdio[2].on('data', (data) => {
-                DataFFMpegStdErr = Buffer.concat([DataFFMpegStdErr, data])
-            })
-            
-            sox.stdio[2].on('data', (data) => {
-                DataSoxStdErr = Buffer.concat([DataSoxStdErr, data])
-            })
-            
-            const exitHandler = function () {
-                if (ffmpegCodeExit != 0 && soxCodeExit != 0) {
-                    const error = `\n\tFFMPEG: ${String(DataFFMpegStdErr)}\n\tSOX: ${String(DataSoxStdErr)}`
-                    reject(new Error(error))
-                } else if (ffmpegCodeExit == 0 && soxCodeExit != 0) {
-                    const error = `\n\tFFMPEG: ${String(DataFFMpegStdErr)}\n\tSOX: ${String(DataSoxStdErr)}`
-                    reject(new Error(error))
-                }
-                
-                if (ffmpegClose && soxClose) {
-                    resolve(buffer)
-                }
-            }
-            
-            ffmpeg.on('exit', (...exit) => {
-                ffmpegClose = true;
-                ffmpegCodeExit = exit[0];
-                exitHandler()
-            })
-            
-            sox.on('exit', (...exit) => {
-                soxClose = true;
-                soxCodeExit = exit[0];
-                exitHandler()
-            })
+
+        input.resume()
+        ffmpeg.stdio[1].resume()
+
+        input.pipe(ffmpeg.stdio[0])
+        ffmpeg.stdio[1].pipe(sox.stdio[0])
+
+        sox.stdio[1].on('data', (data) => {
+            buffer = Buffer.concat([buffer, data])
         })
-        return result
-    } catch (error) {
-        throw error
-    }
+
+        ffmpeg.stdio[2].on('data', (data) => {
+            DataFFMpegStdErr = Buffer.concat([DataFFMpegStdErr, data])
+        })
+
+        sox.stdio[2].on('data', (data) => {
+            DataSoxStdErr = Buffer.concat([DataSoxStdErr, data])
+        })
+
+        const exitHandler = function () {
+            if (ffmpegCodeExit != 0 && soxCodeExit != 0) {
+                const error = `\n\tFFMPEG: ${String(DataFFMpegStdErr)}\n\tSOX: ${String(DataSoxStdErr)}`
+                reject(new Error(error))
+            } else if (ffmpegCodeExit == 0 && soxCodeExit != 0) {
+                const error = `\n\tFFMPEG: ${String(DataFFMpegStdErr)}\n\tSOX: ${String(DataSoxStdErr)}`
+                reject(new Error(error))
+            }
+
+            if (ffmpegClose && soxClose) {
+                resolve(buffer)
+            }
+        }
+
+        ffmpeg.on('exit', (...exit) => {
+            ffmpegClose = true;
+            ffmpegCodeExit = exit[0];
+            exitHandler()
+        })
+
+        sox.on('exit', (...exit) => {
+            soxClose = true;
+            soxCodeExit = exit[0];
+            exitHandler()
+        })
+    })
+    return result
 }
 
-const effect = async function (input: any, args: Array<string>=[]) {
+const effect = async function (input: any, args: Array < string >= []) {
     const opts = {
         ffmpeg: {
             args: {
@@ -101,8 +112,8 @@ const effect = async function (input: any, args: Array<string>=[]) {
                 output: ['-f', 'flac', 'pipe:1'],
                 result: function (this: any) {
                     if (this.effect != 0) {
-                        let res = this.effect.join(',')
-                        return this.input.concat('-filter_complex' , res, this.output)
+                        const res = this.effect.join(',')
+                        return this.input.concat('-filter_complex', res, this.output)
                     } else return this.input.concat(this.output)
                 }
             },
@@ -113,7 +124,9 @@ const effect = async function (input: any, args: Array<string>=[]) {
         sox: {
             args: {
                 input: ['-'],
-                output: ['-t', 'mp3', '-'],
+                output: ['-t',
+                    'mp3',
+                    '-'],
                 effect: [],
                 result: function (this: any) {
                     return (this.input.concat(this.output, this.effect))
@@ -121,7 +134,7 @@ const effect = async function (input: any, args: Array<string>=[]) {
             }
         }
     }
-    
+
     try {
         const result = new Promise(async (resolve, reject) => {
             args.forEach((v) => {
@@ -133,8 +146,9 @@ const effect = async function (input: any, args: Array<string>=[]) {
                     reject(new Error(`Effect "${v}" not found!`))
                 }
             })
-            try { 
-                const result = await processor(input, opts)
+            try {
+                const result = await processor(input,
+                    opts)
                 return resolve(result)
             } catch (error) {
                 reject(error)
@@ -142,7 +156,7 @@ const effect = async function (input: any, args: Array<string>=[]) {
         })
         return result
     } catch (error) {
-        throw error
+        return error
     }
 }
 

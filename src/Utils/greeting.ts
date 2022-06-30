@@ -7,7 +7,7 @@ import * as path from 'path'
 import * as fetcher from './fetcher'
 
 const AssetsPath = path.resolve(__dirname, 'assets')
-const ImagePath = path.resolve(AssetsPath, 'group','greeting')
+const ImagePath = path.resolve(AssetsPath, 'group', 'greeting')
 const FontPath = path.resolve(AssetsPath, 'font')
 
 const ImageRandom = function () {
@@ -24,93 +24,108 @@ interface FormatGreeting {
             user: string;
             group: string;
         };
-        rank: string;
+        rank: string|undefined;
         time: string;
         wm: string|undefined;
     };
 }
 
+/**
+* Greeting card for new members join
+*
+* @param {FormatGreeting} opts - contains the text to be written
+*
+*
+*/
 const join = async function GreetingJoinMember (opts: FormatGreeting) {
-    const { text, url } = opts
-    try {
-        const MidFont = await Jimp.loadFont(`${FontPath}/Montserrat-Mid.ttf.fnt`)
-        const font = {
-            big: undefined,
-            mid: MidFont,
-            small: undefined
-        }
-        
-        const image = await Jimp.read(ImageRandom())
-        
-        const PPRaw = await fetcher.getBuffer(url.pp, {})
-        const PP = await Jimp.read(PPRaw)
-        PP.resize(200, 200)
-        
-        const PrintMidText = function (x, y, text) {
-            image.print(font.mid, x, y, {
-                text: text
-            }, 5000, 500)
-        }
-        
-        if (text.wm) PrintMidText(0, 0, text.wm)
-        PrintMidText(205, 425, 'Welcome to')
-        PrintMidText(240, 480, text.name.group)
-        
-        //User
-        PrintMidText(320, 560, text.name.user + (text.rank ? (" | " + text.rank) : ""))
-        
-        //Time
-        PrintMidText(400, 650, text.time)
-        
-        image.blit(PP, 0, 340)
-        await image.resize(Math.floor(1270*0.8), Math.floor(720*0.8))
-        
-        return await image.getBufferAsync('image/png')
-    } catch (error) {
-        throw error
+    const {
+        text,
+        url
+    } = opts
+
+    const MidFont = await Jimp.loadFont(`${FontPath}/Montserrat-Mid.ttf.fnt`)
+    const font = {
+        big: undefined,
+        mid: MidFont,
+        small: undefined
     }
+
+    const image = await Jimp.read(ImageRandom())
+
+    const PPRaw = await fetcher.getBuffer(url.pp, {})
+    const PP = await Jimp.read(PPRaw)
+    PP.resize(200, 200)
+
+    const PrintMidText = function (x, y, text) {
+        image.print(font.mid, x, y, {
+            text: text
+        }, 5000, 500)
+    }
+
+    if (text.wm) PrintMidText(0, 0, text.wm)
+    PrintMidText(205, 425, 'Welcome to')
+    PrintMidText(240, 480, text.name.group)
+
+    //User
+    PrintMidText(320, 560, text.name.user + (text.rank ? (" | " + text.rank): ""))
+
+    //Time
+    PrintMidText(400, 650, text.time)
+
+    image.blit(PP, 0, 340)
+    await image.resize(Math.floor(1270*0.8), Math.floor(720*0.8))
+
+    return await image.getBufferAsync('image/png')
 }
 
+/**
+* Greeting card for old member left
+*
+* @param {FormatGreeting} opts - contains the text to be written
+*
+*
+*/
 const leave = async function GreetingLeaveMember (opts: FormatGreeting) {
-    const { text, url } = opts
-    try {
-        const MidFont = await Jimp.loadFont(`${FontPath}/Montserrat-Mid.ttf.fnt`)
-        const font = {
-            big: undefined,
-            mid: MidFont,
-            small: undefined
-        }
-        
-        const image = await Jimp.read(ImageRandom())
-        
-        const PPRaw = await fetcher.getBuffer(url.pp, {})
-        const PP = await Jimp.read(PPRaw)
-        PP.resize(200, 200)
-        
-        const PrintMidText = function (x, y, text) {
-            image.print(font.mid, x, y, {
-                text: text
-            }, 5000, 500)
-        }
-        
-        if (text.wm) PrintMidText(0, 0, text.wm)
-        PrintMidText(205, 425, 'Goodbye from')
-        PrintMidText(240, 480, text.name.group)
-        
-        //User
-        PrintMidText(320, 560, text.name.user + (text.rank ? (" | " + text.rank) : ""))
-        
-        //Time
-        PrintMidText(400, 650, text.time)
-        
-        image.blit(PP, 0, 340)
-        await image.resize(Math.floor(1270*0.8), Math.floor(720*0.8))
-        
-        return await image.getBufferAsync('image/png')
-    } catch (error) {
-        throw error
+    const {
+        text,
+        url
+    } = opts
+
+    const MidFont = await Jimp.loadFont(`${FontPath}/Montserrat-Mid.ttf.fnt`)
+    const font = {
+        big: undefined,
+        mid: MidFont,
+        small: undefined
     }
+
+    const image = await Jimp.read(ImageRandom())
+
+    const PPRaw = await fetcher.getBuffer(url.pp, {})
+    const PP = await Jimp.read(PPRaw)
+    PP.resize(200, 200)
+
+    const PrintMidText = function (x, y, text) {
+        image.print(font.mid, x, y, {
+            text: text
+        }, 5000, 500)
+    }
+
+    if (text.wm) PrintMidText(0, 0, text.wm)
+    PrintMidText(205, 425, 'Goodbye from')
+    PrintMidText(240, 480, text.name.group)
+
+    //User
+    PrintMidText(320, 560, text.name.user + (text.rank ? (" | " + text.rank): ""))
+
+    //Time
+    PrintMidText(400, 650, text.time)
+
+    image.blit(PP, 0, 340)
+    await image.resize(Math.floor(1270*0.8), Math.floor(720*0.8))
+
+    return await image.getBufferAsync('image/png')
 }
+
 /*
 const a = {
     wm: 'dxtstd-bot',

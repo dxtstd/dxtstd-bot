@@ -3,7 +3,9 @@ import * as fs from "fs"
 
 import { IsChatType, ChatType } from "../../Types"
 
-const isMedia = function (type: string) {
+const isMedia = function (
+    type: string
+): boolean {
     const MEDIA = {
         'audioMessage': true,
         'videoMessage': true,
@@ -14,7 +16,9 @@ const isMedia = function (type: string) {
     return MEDIA[type] ? true : false
 }
 
-const DownloadMessage = async function DownloadMessage(chat: any, opts: any={}) {
+const DownloadMessage = async function (
+    chat: any, opts: any={}
+): Promise<any> {
     if (!isMedia(chat.message.type)) return new Error()
     let result
     if (opts.stream) {
@@ -22,24 +26,35 @@ const DownloadMessage = async function DownloadMessage(chat: any, opts: any={}) 
     } else {
         result = await downloadMediaMessage(chat, 'buffer', {})
     }
-    if (opts.path && !opts.stream) fs.writeFileSync(opts.path, result as any)
+    if (opts.path && !opts.stream) fs.writeFileSync(opts.path, Buffer.from(result))
     return result
 }
 
-const is = function IsChat(this: IsChatType, chat: any) {
-    const messageType = Object.keys(chat.message)[0];
-    const chatCtxInfo = chat.message[messageType].contextInfo || {};
-              
-    this.baileys = (/*IF MD*/(chat.key.id.startsWith('BAE5')) ? true: (/*IF Not MD*/chat.key.id.startsWith('3EB0') ? true: false));
+const is = function IsChat (
+    this: IsChatType, { key, message }
+): void {
+    const messageType = Object.keys(message)[0];
+    const chatCtxInfo = message[messageType].contextInfo || {};
+       
+    this.baileys = (/*IF MD*/(key.id.startsWith('BAE5')) ? true: (/*IF Not MD*/key.id.startsWith('3EB0') ? true: false));
     this.forward = chatCtxInfo.isForwarding || false;
     this.media = isMedia(messageType);
-    this.quoted = chatCtxInfo.quotedMessage ? true : false;                            
+    this.quoted = chatCtxInfo.quotedMessage ? true : false;
 }
 
-export function SimpleChat (this: any, chat: any, client: any) {
-    chat = new proto.WebMessageInfo((chat.messages ? chat.messages[0] : {}))
-    const message = chat.message
-    if (!message) return
+/**
+ * Simplify messages
+ *
+ * @param client - Baileys WASocket
+ * 
+ */
+const SimpleChat = function (
+    [ chat ], client
+): proto.WebMessageInfo {
+    let { message } = chat;
+    if (!message) {
+        return (new proto.WebMessageInfo())
+    }
     
     if (Object.keys(message)[0] == "senderKeyDistributionMessage") {
         if (Object.keys(message)[1] == "messageContextInfo") {
@@ -47,7 +62,7 @@ export function SimpleChat (this: any, chat: any, client: any) {
         } else message.type = Object.keys(message)[1]
     } else message.type = Object.keys(message)[0]
     
-    chat.is = new (is as any)(chat)
+    chat.is = new is(chat)
     chat.download = async function(this: any, opts: any={}) {
         return await DownloadMessage(this, opts)
     }
@@ -73,7 +88,7 @@ export function SimpleChat (this: any, chat: any, client: any) {
         //Quoted Message
         CQ.message = CQO.quotedMessage
         CQ.message.type = Object.keys(CQ.message)[0]
-        CQ.is = new (is as any)(CQ)
+        CQ.is = new is(CQ)
 
 
         CQ.download = async function(this: any, opts: any={}) {
@@ -86,6 +101,9 @@ export function SimpleChat (this: any, chat: any, client: any) {
         
         return (new proto.WebMessageInfo(CQ))
     }
+    return new proto.WebMessageInfo(chat)
+}
 
-    this.messages = [chat]
-} 
+export {
+    SimpleChat
+}

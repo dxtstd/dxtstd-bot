@@ -4,51 +4,59 @@ import { logger } from '../../../Utils';
 import { GroupHandler } from '..'
 
 import chalk from 'chalk';
-import * as util from 'util';
 
-const coloringText = function (text: string, color: string) {
+const coloringText = function (
+    text: string, color: string
+): string {
     return !color ? chalk.keyword('white')(text) : chalk.keyword(color)(text)
 };
 
-const coloringBGText = function (text: string, color: string) {
-    return !color ? chalk.bgKeyword('white')(text) : chalk.bgKeyword(color)(text)
-};
-
-export async function ReceiverMessageHandler (chat: any, client: any, database: any) {
+/**
+ * Handler for receiving messages
+ *
+ * @param client - Baileys WASocket
+ * @param database - Database Bot
+ *
+ */
+const ReceiverMessageHandler = async function (
+    { messages, type }, client, database
+): Promise<void> {
     try {
-        if (!chat) return;
-        if (chat.type === 'append') return;
-
-        chat = (new (SimpleChat as any)(chat, client)).messages[0];
+        const chat = SimpleChat(messages, client);
         if (!chat.message) return;
         if (chat.key && chat.key.remoteJid == 'status@broadcast') return;
-        //if (chat.key.fromMe) return;
+        if (chat.key.fromMe) return;
         
-        await GroupHandler(chat, client, database)
+        GroupHandler(chat, client, database)
         const data = SimpleData(chat, database);
-        const fetchLog = function (object: any) {
-            let text = coloringText('\"' + object.text.full + '\"', 'white');
+        const fetchLog = function (): string {
+            let text = coloringText('"' + data.text.full + '"', 'white');
             text += coloringText(' From: ', 'yellow');
-            text += object.name.user;
-            if (object.on.group) {
+            text += data.name.user;
+            if (data.on.group) {
                 text += coloringText(' Group: ', 'yellow');
-                text += object.name.group;
-            };
-            text += coloringText(' MessageType: ' + object.type, 'lime');
+                text += data.name.group;
+            }
+            text += coloringText(' MessageType: ' + data.type, 'lime');
             return text;
         };
         
-        if (data.text.command) logger.command(fetchLog(data));
-            else logger.message(fetchLog(data));
+        client.readMessages([chat.key]);
+        if (data.text.command) logger.command(fetchLog());
+            else logger.message(fetchLog());
             
-        if (database.config.ReadOnly) return
+        if (database.config.ReadOnly) return;
 
         if (data.text.command) {
             CommandHandler(client, { data, database })
-        };
+        }
         
         //console.log(data)
     } catch (error) {
         logger.error(error);
-    };
+    }
 };
+
+export {
+    ReceiverMessageHandler
+}

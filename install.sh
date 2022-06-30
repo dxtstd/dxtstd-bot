@@ -209,23 +209,31 @@ ask_install_npm() {
     ;;
     esac
 
-    NPM_PACKAGE="typescript ts-node nodemon"
+    NPM_PACKAGE="typescript ts-node nodemon yarn"
     if [ $ANSWER == 'Y' ]
     then
+        rm package-lock.json
+        rm yarn.lock
         if [ $DEVICE_OS == "GNU/Linux" ] 
         then
-            echo "Installing NPM Global: $NPM_PACKAGE..."
+            echo "Installing Package NPM Global: $NPM_PACKAGE..."
             sudo npm install $NPM_PACKAGE -g
-            echo "Installing NPM For This Bot..."
+            echo "Installing Package For This Bot..."
             npm install --no-bin-links
             else if [ $DEVICE_OS == "Android" ]
             then
-                echo "Installing NPM Global: $NPM_PACKAGE..."
+                echo "Installing Package NPM Global: $NPM_PACKAGE..."
                 npm install $NPM_PACKAGE -g
-                echo "Installing NPM For This Bot..."
+                echo "Installing Package NPM For This Bot..."
                 npm install --no-bin-links
             fi
         fi
+
+#        echo "Build @adiwajshing/baileys"
+#        cd node_modules/@adiwajshing/baileys
+#        echo "tsc build"
+#        tsc
+#        cd ../../..
     fi
 }
 ask_install_npm

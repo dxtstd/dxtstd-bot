@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as os from 'os'
+import * as os from 'os';
+
 import { logger } from '../Utils';
-import { CommandType } from '../Types' 
+import { CommandType } from '../Types';
 
 interface CategoryCommand {
     downloader: any;
@@ -18,18 +19,20 @@ interface ClassCommands {
     load: () => void
 }
 
-const COMMANDS_PATH = path.resolve(__dirname, '..', 'Commands/')
+const COMMANDS_PATH = path.resolve(__dirname, '..', 'Commands/');
 const DEVICE_OS = os.platform()
 const loader = function loader(this: ClassCommands) {
     const dir = fs.readdirSync(COMMANDS_PATH)
-    for (let FileCommand of dir) {
+    for (const FileCommand of dir) {
         try {
             let TMPLoadCMD = {} as CommandType
             const CommandOnDir = (!(FileCommand.endsWith('.ts')) && (fs.existsSync(path.join(COMMANDS_PATH, FileCommand, 'index.ts'))))
             const CommandOnFile = (FileCommand.endsWith('.ts'))
             if (CommandOnDir) {
+                //delete require.cache[require.resolve(FileCommand)]
                 TMPLoadCMD = require(path.join(COMMANDS_PATH, FileCommand))
             } else if (CommandOnFile) {
+                //delete require.cache[require.resolve(FileCommand)]
                 TMPLoadCMD = require(path.join(COMMANDS_PATH, FileCommand))
             } else {
                 continue
@@ -48,7 +51,7 @@ const loader = function loader(this: ClassCommands) {
                 continue
             }
             if (TMPLoadCMD.beta) {
-                
+                /* */
             }
             
             if (TMPLoadCMD.category != '') {
@@ -63,16 +66,16 @@ const loader = function loader(this: ClassCommands) {
     }
 }
 
-export class Commands {
-    category: CategoryCommand = {
+export class Commands implements ClassCommands {
+    public category: CategoryCommand = {
         
     } as CategoryCommand
     
-    uncategory = {
+    public uncategory: any = {
         
-    } as any
+    }
     
-    load = () => {}
+    declare load: () => void
     constructor() {
         this.load = loader
         this.load()

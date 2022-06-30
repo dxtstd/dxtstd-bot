@@ -9,7 +9,7 @@ const MakeRandom = function () {
     return Math.floor(Math.random() * 9)
 }
 
-const MakeTMPFile = function (ext: string='', dir: string='', media: any=undefined) {
+const MakeTMPFile = function (ext?: string, dir?: string, media?: any) {
     dir = dir ? dir : defaultDirTMP;
     if (!existsSync(dir)) new Error();
     
@@ -33,7 +33,7 @@ const MakeTMPFile = function (ext: string='', dir: string='', media: any=undefin
     return filename
 }
 
-const MakeTMPFolder = function (dir: string='') {
+const MakeTMPFolder = function (dir?: string) {
     dir = dir ? dir : defaultDirTMP;
     if (!existsSync(dir)) new Error();
     

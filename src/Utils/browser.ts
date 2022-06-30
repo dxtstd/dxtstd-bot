@@ -32,7 +32,7 @@ const ssweb = async function (url: string) {
     } catch (error) {
         browser.close();
         throw error;
-    };
+    }
 };
 
 export {

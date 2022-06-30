@@ -1,6 +1,4 @@
 import makeWASocket, { DEFAULT_CONNECTION_CONFIG } from '@adiwajshing/baileys';
-import * as fs from 'fs';
-import * as path from 'path';
 
 import { logger } from '../Utils';
 import { Database } from './database';

@@ -10,12 +10,17 @@ const MakeError = function (text) {
     return new TypeError(text)
 }
 
-const StartBot = function (opts: any={}) {
+/**
+ * Initialize and run the bot
+ * 
+ * @param {OptsStartBot} opts - Option to run bot
+ */
+const StartBot = function (opts: any={}): any {
     try {
         const client = startClient(opts)
-        return client as any
+        return client
     } catch (error) {
-        return {} as any
+        return {}
     }
 }
 

@@ -16,7 +16,7 @@ import {
 const PathDatabase = path.join(__dirname, '..', '..', 'database/')
 !fs.existsSync(PathDatabase) && fs.mkdirSync(PathDatabase)
 
-const MakePathDatabase = function (name: string='') {
+const MakePathDatabase = function (name?: string) {
     name = name || 'main'
     const DirDB = (path.resolve(__dirname, '..', '..', 'database', name) + '/')
     const FileConfigJSON = DirDB + 'config.json'
@@ -57,14 +57,14 @@ const NotEmptyJSON = function (value) {
     return (!(value == {}))
 }
 
-const ExistDatabase = function (this: any, name: string='') {
+const ExistDatabase = function (this: any, name?: string) {
     name = name || this.config.db.name || 'main'
     
     const PathDB = MakePathDatabase(name)
     return fs.existsSync(PathDB.dir)
 };
 
-const CreateDatabase = function (this: any, name: string='') {
+const CreateDatabase = function (this: any, name?: string) {
     if (this.exist(name)) { 
         logger.warn('This database has exists!');
         this.load(name);
@@ -73,7 +73,7 @@ const CreateDatabase = function (this: any, name: string='') {
     
     name = name || this.config.db.name || 'main'
     this.config.db.name = name
-    logger.info('Make database for \"%s\"...', name)
+    logger.info('Make database for "%s"...', name)
 
     const PathDB = MakePathDatabase(name)
     
@@ -90,11 +90,11 @@ const CreateDatabase = function (this: any, name: string='') {
     })
 };
 
-const LoadDatabase = function (this: any, name: string='') {
+const LoadDatabase = function (this: any, name?: string) {
     name = name || this.config.db.name || 'main';
     this.config.db.name = name
 
-    logger.debug('Load database \"%s\"...', name)
+    logger.debug('Load database "%s"...', name)
 
     if (!this.exist(name)) {
         logger.warn('This database doesn\'t exists!');
@@ -121,9 +121,9 @@ const LoadDatabase = function (this: any, name: string='') {
         }
     })
 }
-const SaveDatabase = function (this: any, name: string='') {
+const SaveDatabase = function (this: any, name?: string) {
     name = name || this.config.db.name || 'main'
-    logger.debug('Save database \"%s\"...', name)
+    logger.debug('Save database "%s"...', name)
     
     const PathDB = MakePathDatabase(name);
     
@@ -131,7 +131,7 @@ const SaveDatabase = function (this: any, name: string='') {
         try {
             if (NotEmptyJSON(this[value])) {
                 if (value == 'auth') {
-                    fs.writeFileSync(PathDB.file[value], Stringify(this[value], BufferJSON.replacer))
+                    
                 } else {
                     fs.writeFileSync(PathDB.file[value], Stringify(this[value]))
                 }
@@ -143,16 +143,16 @@ const SaveDatabase = function (this: any, name: string='') {
 }
 
 
-const CreateBackupDatabase = function (this: any, name: string='', opts: any={}) {
-    
+const CreateBackupDatabase = function (this: any, name?: string, opts: any={}) {
+    /* */
 }
 
-const RestoreBackupDatabase = function (this: any, name: string='', opts: any={}) {
-    
+const RestoreBackupDatabase = function (this: any, name?: string, opts: any={}) {
+    /* */
 }
 
 const AutoBackupDatabase = function (this: any, opts: any={}) {
-    
+    /* */
 }
 
 export class Database {
@@ -165,18 +165,18 @@ export class Database {
     groups = {};
     store = {};
     
-    exist = (name: string='') => {};
-    create = (name: string='') => {};
-    load = (name: string='') => {};
-    save = (name: string='') => {};
+    declare exist: (name?: string) => void;
+    declare create: (name?: string) => void;
+    declare load: (name?: string) => void;
+    declare save: (name?: string) => void;
     
-    backup = {
-        create: (name: string='', opts: any={}) => {},
-        restore: (name: string='', opts: any={}) => {},
-        auto: (opts: any={}) => {}
+    declare backup: {
+        create: (name?: string, opts?: any) => void,
+        restore: (name?: string, opts?: any) => void,
+        auto: (opts: any) => void
     };
     
-    constructor(name: string='') {
+    constructor(name?: string) {
         this.config.db.name = name || 'others';
         this.store = makeInMemoryStore({});
         this.exist = ExistDatabase;
@@ -184,8 +184,10 @@ export class Database {
         this.load = LoadDatabase;
         this.save = SaveDatabase;
         
-        this.backup.create = CreateBackupDatabase;
-        this.backup.restore = RestoreBackupDatabase;
-        this.backup.auto = AutoBackupDatabase;
+        this.backup = {
+            create: CreateBackupDatabase,
+            restore: RestoreBackupDatabase,
+            auto: AutoBackupDatabase
+        }
     }
 }

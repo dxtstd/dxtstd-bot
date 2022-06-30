@@ -15,11 +15,12 @@ const OptsFFMpeg = function () {
                     return this.input.concat('-filter_complex' , res, this.output)
                 } else return this.input.concat(this.output)
             }
-        }
+        },
+        stdio: ['pipe', 'pipe', 'pipe']
     } as any
 }
 
-const processor = async function (input: any, opts: any) {
+const processor = async function (input: any, opts: any): Promise<Buffer> {
     let output;
     if (opts.args.output.reverse()[0] == '-' || opts.args.output.reverse()[0] == 'pipe:1') output = "stream"
     else output = "file"
@@ -27,7 +28,9 @@ const processor = async function (input: any, opts: any) {
         const result = await new Promise(async (resolve, reject) => {
             if (!input._readableState) return reject(new Error('The input must be a stream!'));
             
-            const ffmpeg = spawn('ffmpeg', opts.args.result())
+            const ffmpeg = spawn('ffmpeg', opts.args.result(), {
+                stdio: opts.stdio
+            })
             let DataFFMpegStdErr = Buffer.from([])
             let DataFFMpegStdOut = Buffer.from([])
             let ffmpegClose;
@@ -65,9 +68,10 @@ const processor = async function (input: any, opts: any) {
             ffmpeg.stdio[1].on('data', (data) => {
                 DataFFMpegStdOut = Buffer.concat([DataFFMpegStdOut, data])
             })
-        })
+        }) as Buffer
         return result
     } catch (error) {
+        console.log(error)
         throw error
     }
 }

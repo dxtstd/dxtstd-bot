@@ -1,6 +1,8 @@
 import { Commands } from '../command'
 import { logger } from '../../Utils'
 
+import * as util from 'util'
+
 export async function CommandHandler (this: any, client, { data, database }) {
     const commands = new Commands()
     let command
@@ -19,13 +21,13 @@ export async function CommandHandler (this: any, client, { data, database }) {
     })
     
     if (!command) {
-        let text = `Command *${data.text.command}* not found.`
+        const text = `Command *${data.text.command}* not found.`
         client.sendMessage(data.from, { text: text }, { quoted: data.chat })
         return
     }
     
     if (command.permission.owner && !data.user.is.owner) {
-        let text = 'You are not the owner!'
+        const text = 'You are not the owner!'
         client.sendMessage(data.from, { text: text }, { quoted: data.chat })
         return
     }
@@ -33,6 +35,9 @@ export async function CommandHandler (this: any, client, { data, database }) {
     try {
         command.default.call(this, client, { data, database }, logger)
     } catch (error) {
+        client.sendMessage(data.from, {
+            text: util.format(error)
+        }, { quoted: data.chat })
         logger.error(error)
     }
 }

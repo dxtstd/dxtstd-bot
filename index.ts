@@ -32,10 +32,9 @@ logger.info({
 
 /**
  * Start a ts file
- * @param {String} file `path/to/file`
+ * @param {string} file `path/to/file`
  */
- 
-const start = function (file: string, opts: object={}) {
+const start = function (file: string, opts?: object): void {
     IsRunning = true
     const args = [path.resolve(__dirname, file), ...process.argv.slice(2)]
     let i = 0

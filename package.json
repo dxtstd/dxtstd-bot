@@ -17,9 +17,10 @@
   },
   "license": "GPL-2.0",
   "dependencies": {
-    "@adiwajshing/baileys": "^4.2.0",
+    "@adiwajshing/baileys": "github:adiwajshing/baileys",
     "@adiwajshing/keyed-db": "^0.2.4",
     "@hapi/boom": "^10.0.0",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
     "cfonts": "^2.10.1",
@@ -33,12 +34,14 @@
     "jspdf": "^2.5.1",
     "link-preview-js": "^2.1.15",
     "moment-timezone": "^0.5.34",
+    "node-id3": "^0.2.3",
     "node-webpmux": "^3.1.1",
     "pino": "^7.11.0",
     "pino-pretty": "^7.6.1",
     "puppeteer": "^14.1.0",
     "qrcode": "^1.5.0",
     "qrcode-terminal": "^0.12.0",
-    "yargs": "^17.5.1"
+    "yargs": "^17.5.1",
+    "ytdl-core": "^4.11.0"
   }
 }

@@ -2,7 +2,7 @@ import axios from 'axios'
 import * as https from 'https'
 import * as http from 'http'
 
-const getBuffer = async(url, options) => {
+const getBuffer = async(url, options?) => {
     options ? options : {}
     try {
         const res = await axios({
@@ -21,7 +21,27 @@ const getBuffer = async(url, options) => {
     }
 }
 
-const getWeb = async function (url, options) {
+const getStream = async(url, options?) => {
+    options ? options : {}
+    try {
+        const res = await axios({
+            method: 'GET',
+            url,
+            headers: {
+                'DNT': 1,
+                'Upgrade-Insecure-Request': 1
+            },
+            responseType: 'stream',
+            ...options
+        })
+        return res.data
+    } catch (e) {
+        console.log(`Error : ${e}`)
+    }
+}
+
+
+const getWeb = async function (url, options?) {
     options ? options : {}
     try {
         const res = await axios({
@@ -36,7 +56,7 @@ const getWeb = async function (url, options) {
 };
 
 
-const getJSON = async function (url, options) {
+const getJSON = async function (url, options?) {
     options ? options : {}
     let res;
     try {
@@ -58,5 +78,6 @@ const getJSON = async function (url, options) {
 export {
     getWeb,
     getBuffer,
+    getStream,
     getJSON
 }

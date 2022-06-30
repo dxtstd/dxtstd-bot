@@ -1,6 +1,8 @@
 import * as util from 'util'
 import { CommandType } from '../Types'
 
+import { ytdl } from '../Utils'
+
 const help = ({data, database}) => {
     const pref = database.config.prefix
     const cmd = data.text.command
@@ -13,6 +15,14 @@ ${pref}${cmd}
 const command: CommandType = {} as CommandType;
 command.default = async (client, { data, database }, logger) => {
     try {
+        const { args } = data.text
+        switch (args[0]) {
+            case 'mp3':
+                const audio = await ytdl.mp3(args[1])
+                client.sendMessage(data.from, { audio: audio, mimetype: 'audio/mpeg' }, { quoted: data.chat })
+                break;
+            
+        }
         
     } catch (e) {
         logger.error(e)
@@ -47,10 +57,10 @@ command.need = {
     level: 0
 };
 //INFO
-command.name = ''
-command.help = [].map(v => v + ' ');
-command.category = ''
-command.use = /^$/i;
+command.name = 'ytdl'
+command.help = ['youtubedl'].map(v => v + ' <link>');
+command.category = 'downloader'
+command.use = /^(yt|youtube)(dl)$/i;
 
 //OPTION
 command.disable = {
@@ -60,7 +70,7 @@ command.disable = {
 command.support = {
     android: true,
     linux: true,
-    windows: true
+    windows: false
 };
 
 module.exports = command;

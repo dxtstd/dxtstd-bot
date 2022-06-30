@@ -1,4 +1,4 @@
-import { DataType } from './data';
+//import { DataType } from './data';
 
 export interface CommandType {
     default: (client: any, { data: DataType, database }, logger: any) => void;
@@ -38,4 +38,4 @@ export interface CommandType {
         linux: boolean;
         windows: boolean
     }
-};
+}
