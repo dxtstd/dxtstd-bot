@@ -96,7 +96,7 @@ const mp3 = async function (
     link: string, output?: string
 ): Promise<any> {
     const InfoVideo = await GetInfo(link);
-    const AudioStream = await ytdl(InfoVideo.url.original, { quality: InfoVideo.tag.audio })
+    const AudioStream = await fetcher.getStream(InfoVideo.url.audio)
     
     const result = await new Promise(async (res, rej) => {
         try {
