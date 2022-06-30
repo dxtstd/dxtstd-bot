@@ -61,7 +61,8 @@ const loader = function loader(this: ClassCommands) {
                 this.uncategory[TMPLoadCMD.name] = TMPLoadCMD
             }
         } catch (error) {
-            logger.error(error)
+            //logger.error(error)
+            throw error
         }
     }
 }

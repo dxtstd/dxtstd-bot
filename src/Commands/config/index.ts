@@ -1,7 +1,8 @@
 import * as util from 'util'
 import { CommandType } from '../../Types'
 
-import { ConfigGroup } from './group'
+import { Enable } from './enable'
+import { Disable } from './disable'
 
 const help = ({data, database}) => {
     const pref = database.config.prefix
@@ -15,10 +16,14 @@ ${pref}${cmd}
 const command: CommandType = {} as CommandType;
 command.default = async (client, { data, database }, logger) => {
     try {
-        const group = new ConfigGroup(data.from, database)
-        const users = ""
-        
-        
+        switch (data.text.command) {
+            case 'enable':
+                await Enable(data.text.args, { client, data, database})
+                break;
+            case 'disable':
+                await Disable(data.text.args, { client, data, database})
+                break;
+        }
         
     } catch (e) {
         logger.error(e)
@@ -54,9 +59,10 @@ command.need = {
 };
 //INFO
 command.name = 'config'
-command.help = ['group', 'user'].map(v => v + ' ');
-command.category = 'utility'
-command.use = /^(group)?(user)?$/i;
+const TextHelp = ''
+command.help = ['enable', 'disable'].map(v => v + ' ' + TextHelp);
+command.category = 'config'
+command.use = /^(enable)?(disable)?$/i;
 
 //OPTION
 command.disable = {

@@ -5,7 +5,9 @@ import { execSync } from "child_process"
 import { CommandType } from '../Types'
 
 const command: CommandType = {} as CommandType
-command.default = async (client, { data, database }, logger) => {
+command.default = async (
+    client, { data, database }, logger
+) => {
     try {
         const ExecResult = (await execSync(data.text.body)).toString().trim();
         client.sendMessage(data.from, { text: util.format(ExecResult) }, { quoted: data.chat })

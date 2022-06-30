@@ -5,7 +5,9 @@ import { sticker } from '../Utils'
 import { CommandType } from '../Types'
 
 const command: CommandType = {} as CommandType
-command.default = async (client, { data, database }, logger) => {
+command.default = async (
+    client, { data, database }, logger
+) => {
     try {
         let msg;
         if (data.chat.is.media) msg = data.chat;

@@ -1,4 +1,4 @@
-import { ReceiverMessageHandler, ContactsHandler } from './'
+import { ReceiverMessageHandler, GroupParticipantHandler, ContactsHandler } from './'
 import { startClient } from '../client'
 import { logger } from '../../Utils'
 
@@ -12,6 +12,10 @@ export async function EventsHandler (client, database, opts: object={}) {
         database.load()
         database.auth = client.authState
         database.save()
+    })
+    
+    ev.on('group-participants.update', (group) => {
+        GroupParticipantHandler(group, client, database)
     })
     
     ev.on('messages.upsert', (chat) => {

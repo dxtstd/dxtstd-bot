@@ -13,7 +13,9 @@ ${pref}${cmd}
 }
 
 const command: CommandType = {} as CommandType;
-command.default = async (client, { data, database }, logger) => {
+command.default = async (
+    client, { data, database }, logger
+) => {
     try {
         const { args } = data.text
         switch (args[0]) {

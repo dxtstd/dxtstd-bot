@@ -4,6 +4,7 @@ import { logger } from '../../Utils'
 import * as util from 'util'
 
 export async function CommandHandler (this: any, client, { data, database }) {
+    try {
     const commands = new Commands()
     let command
     Object.keys(commands.uncategory).forEach(cmd => {
@@ -34,6 +35,12 @@ export async function CommandHandler (this: any, client, { data, database }) {
     
     try {
         command.default.call(this, client, { data, database }, logger)
+    } catch (error) {
+        client.sendMessage(data.from, {
+            text: util.format(error)
+        }, { quoted: data.chat })
+        logger.error(error)
+    }
     } catch (error) {
         client.sendMessage(data.from, {
             text: util.format(error)

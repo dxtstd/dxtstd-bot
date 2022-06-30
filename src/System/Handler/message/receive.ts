@@ -27,7 +27,7 @@ const ReceiverMessageHandler = async function (
         if (chat.key && chat.key.remoteJid == 'status@broadcast') return;
         if (chat.key.fromMe) return;
         
-        GroupHandler(chat, client, database)
+        GroupHandler(chat.key.remoteJid, client, database)
         const data = SimpleData(chat, database);
         const fetchLog = function (): string {
             let text = coloringText('"' + data.text.full + '"', 'white');

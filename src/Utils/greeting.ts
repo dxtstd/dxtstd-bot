@@ -6,7 +6,7 @@ import * as path from 'path'
 
 import * as fetcher from './fetcher'
 
-const AssetsPath = path.resolve(__dirname, 'assets')
+const AssetsPath = path.resolve(__dirname, '../..', 'assets')
 const ImagePath = path.resolve(AssetsPath, 'group', 'greeting')
 const FontPath = path.resolve(AssetsPath, 'font')
 
@@ -17,16 +17,16 @@ const ImageRandom = function () {
 
 interface FormatGreeting {
     url: {
-        pp: string;
+        pp?: string;
     };
     text: {
         name: {
             user: string;
             group: string;
         };
-        rank: string|undefined;
+        rank?: string;
         time: string;
-        wm: string|undefined;
+        wm?: string;
     };
 }
 
@@ -52,7 +52,9 @@ const join = async function GreetingJoinMember (opts: FormatGreeting) {
 
     const image = await Jimp.read(ImageRandom())
 
-    const PPRaw = await fetcher.getBuffer(url.pp, {})
+    const PPRaw = (url.pp) ? await fetcher.getBuffer(url.pp, {}) : await fs.readFileSync(
+        path.resolve(__dirname, '../..', 'assets', 'blank.png')
+    )
     const PP = await Jimp.read(PPRaw)
     PP.resize(200, 200)
 
@@ -67,7 +69,7 @@ const join = async function GreetingJoinMember (opts: FormatGreeting) {
     PrintMidText(240, 480, text.name.group)
 
     //User
-    PrintMidText(320, 560, text.name.user + (text.rank ? (" | " + text.rank): ""))
+    PrintMidText(320, 560, (text.name.user + (text.rank ? (" | " + text.rank): "")))
 
     //Time
     PrintMidText(400, 650, text.time)
@@ -100,7 +102,9 @@ const leave = async function GreetingLeaveMember (opts: FormatGreeting) {
 
     const image = await Jimp.read(ImageRandom())
 
-    const PPRaw = await fetcher.getBuffer(url.pp, {})
+    const PPRaw = (url.pp) ? await fetcher.getBuffer(url.pp, {}) : await fs.readFileSync(
+        path.resolve(__dirname, '../..', 'assets', 'blank.png')
+    )
     const PP = await Jimp.read(PPRaw)
     PP.resize(200, 200)
 

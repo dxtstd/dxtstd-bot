@@ -1,6 +1,7 @@
 export * as audio from './audio'
 export * as browser from './browser'
 export * as ffmpeg from './ffmpeg'
+export * as greeting from './greeting'
 export * as libre from './libre'
 export * as magick from './magick'
 export * as sticker from './sticker'
