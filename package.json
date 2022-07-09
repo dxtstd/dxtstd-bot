@@ -1,7 +1,7 @@
 {
   "name": "dxtstd-bot",
   "version": "1.3.0",
-  "description": "Bot WhatsApp",
+  "description": "TypeScript Bot WhatsApp",
   "deprecated": false,
   "main": "index.ts",
   "scripts": {
@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/DentaCH/dxtstd-bot.git"
   },
-  "license": "GPL-2.0",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@adiwajshing/baileys": "github:adiwajshing/baileys",
     "@adiwajshing/keyed-db": "^0.2.4",

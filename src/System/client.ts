@@ -16,6 +16,9 @@ const startClient = function (opts: any={}) {
     });
     
     if (opts.bind) EventsHandler(client, database, opts);
+    
+    
+    //client.user.id = FixID(client.user.id)
     return client;
 };
 

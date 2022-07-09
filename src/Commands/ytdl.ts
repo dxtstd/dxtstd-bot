@@ -37,7 +37,7 @@ command.default = async (
 }
 //PERMISSION
 command.permission = {
-    owner: true,
+    owner:false,
     admin: {
         bot: false,
         normal: false,

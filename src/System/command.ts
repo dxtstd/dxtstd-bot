@@ -6,6 +6,7 @@ import { logger } from '../Utils';
 import { CommandType } from '../Types';
 
 interface CategoryCommand {
+    config: any;
     downloader: any;
     games: any;
     general: any;

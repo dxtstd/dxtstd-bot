@@ -25,7 +25,7 @@ command.default = async (client, { data, database }, logger) => {
 }
 //PERMISSION
 command.permission = {
-    owner: true,
+    owner: false,
     admin: {
         bot: false,
         normal: false,

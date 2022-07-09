@@ -3,6 +3,22 @@ if ! [ $PREFIX ]
 then
     PREFIX='/usr'
 fi
+### WHEN $TMPDIR IS UNDEFINED
+if ! [ $TMPDIR ]
+then
+    TMPDIR='/tmp'
+fi
+
+#for PROOT users
+if ! [ -e "/usr/bin/sudo" ]
+then
+    if ! [ $UID == "0" ] 
+    then
+        echo "go to root to install sudo, and bash install.sh again"
+        else
+          apt install sudo
+    fi
+fi
 
 ###WELCOME
 TEXT_WELCOME_UP="DXTSTD-Bot"
@@ -100,7 +116,7 @@ NODEJS_LINUX() {
             NODEJS_ARCH='arm64'
             else if { [ $DEVICE_ARCH == 'aarch32' ] || [ $DEVICE_ARCH == 'armv8l' ] || [ $DEVICE_ARCH == 'armv7l' ]; }
             then
-                NODEJS_ARCH='armv7'
+                NODEJS_ARCH='armv7l'
             fi
         fi
     fi

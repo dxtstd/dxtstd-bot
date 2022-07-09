@@ -4,7 +4,34 @@ import * as path from 'path'
 import { DataType, Text } from "../../Types"
 import { Database } from '../database'
 
-export function SimpleData (this: any, chat: any, database)  {
+interface Admin {
+    super: boolean;
+    normal: boolean;
+}
+
+export function SimpleAdmin (uid, gid, database): Admin {
+    database.load()
+    const FixID = id => (((id).split(":")[0]+"@"+(id).split("@")[1]))
+    const group = database.groups[gid]
+    let superadmin: boolean = false;
+    let normaladmin: boolean = false;
+    
+    if (group) {
+        group.participants.forEach(({ id, admin }) => {
+            if (FixID(uid) == FixID(id)) {
+                if (admin == 'admin') normaladmin = true;
+                if (admin == 'superadmin') superadmin = true
+            }
+        })
+    }
+    
+    return {
+        super: superadmin,
+        normal: normaladmin
+    }
+}
+
+export function SimpleData (chat: any, database): DataType  {
     const db = new Database(database.config.db.name)
     db.load()
     
@@ -37,10 +64,8 @@ export function SimpleData (this: any, chat: any, database)  {
     
     data['user']['is']['owner'] = data.sender.startsWith(database.config.owner.NoPhone)
     //data['user']['is']['coowner'] = data.sender.startsWith(config.coowner.NoPhone)
-    data['user']['is']['admin'] = {
-        super: false,
-        normal: false
-    }
+    data['user']['is']['admin'] = SimpleAdmin(data.sender, data.from, database)
+    
     data['name'] = {
         user: "",
         group: ""
@@ -63,3 +88,4 @@ export function SimpleData (this: any, chat: any, database)  {
     data['text']['command'] = (text.startsWith(database.config.prefix) ? text.slice(1).trim().split(/ +/).shift().toLowerCase() : undefined)
     return data
 }
+

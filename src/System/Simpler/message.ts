@@ -67,7 +67,7 @@ const SimpleChat = function (
         return await DownloadMessage(this, opts)
     }
     chat.resend = async function (this: any, opts: any={}) {
-        const RJ = this.key.remoteJid || opts.remoteJid
+        const RJ = opts.remoteJid || this.key.remoteJid 
         return await client.relayMessage(RJ, this.message, { messageid: this.key.id })
     }
 
