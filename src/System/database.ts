@@ -131,7 +131,7 @@ const SaveDatabase = function (this: any, name?: string) {
         try {
             if (NotEmptyJSON(this[value])) {
                 if (value == 'auth') {
-                    
+                    fs.writeFileSync(PathDB.file[value], Stringify(this[value], BufferJSON.replacer))
                 } else {
                     fs.writeFileSync(PathDB.file[value], Stringify(this[value]))
                 }
