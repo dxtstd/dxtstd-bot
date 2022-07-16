@@ -33,6 +33,11 @@ const USER = {
 const GROUP = {
     gid: '',
     config: {
+        anti: {
+            link: false,
+            virtex: false,
+            spam: false
+        },
         greeting: {
             active: false,
             join: 'Welcome @user, in group @subject!',

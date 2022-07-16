@@ -1,8 +1,8 @@
-import pino from "pino"
-import chalk from "chalk"
+import pino from 'pino'
+import chalk from 'chalk'
 import * as moment from 'moment-timezone'
-import * as fs from "fs"
-import * as path from "path"
+import * as fs from 'fs'
+import * as path from 'path'
 
 const config = JSON.parse(String(fs.readFileSync(path.resolve(__dirname, '../../config.json'))))
 
@@ -19,25 +19,25 @@ const coloringBGText = function (text: string, color: string) {
 //LOGGER
 const pinoLevel = function (logLevel: any) {
     if (logLevel == 31) {
-        return coloringText("[  " + "MESSAGE" + "  ]", 'cyan')
+        return coloringText('[  ' + 'MESSAGE' + '  ]', 'cyan')
     } else if (logLevel == 32) {
-        return coloringText("[  " + "COMMAND" + "  ]", 'cyan')
+        return coloringText('[  ' + 'COMMAND' + '  ]', 'cyan')
     }
 
     if (logLevel == 10) {
-        return coloringText(("[  " + "TRACE" + "  ]"), 'yellow')
+        return coloringText(('[  ' + 'TRACE' + '  ]'), 'yellow')
     } else if (logLevel == 20) {
-        return coloringText(("[  " + "DEBUG" + "  ]"), 'yellow')
+        return coloringText(('[  ' + 'DEBUG' + '  ]'), 'yellow')
     } else if (logLevel == 30) {
-        return coloringText(("[  " + "INFO" + "  ]"), 'lime')
+        return coloringText(('[  ' + 'INFO' + '  ]'), 'lime')
     } else if (logLevel == 40) {
-        return coloringText(("[  " + "WARN" + "  ]"), 'yellow')
+        return coloringText(('[  ' + 'WARN' + '  ]'), 'yellow')
     } else if (logLevel == 50) {
-        return coloringText(("[  " + "ERROR" + "  ]"), 'red')
+        return coloringText(('[  ' + 'ERROR' + '  ]'), 'red')
     } else if (logLevel == 60) {
-        return coloringBGText(("[  " + "FATAL" + "  ]"), 'red')
+        return coloringBGText(('[  ' + 'FATAL' + '  ]'), 'red')
     } else {
-        return coloringText(("[  " + "USERLVL" + "  ]"), 'white')
+        return coloringText(('[  ' + 'USERLVL' + '  ]'), 'white')
     }
 
 

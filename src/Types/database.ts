@@ -49,9 +49,14 @@ export interface GroupType {
     descId: string;
     restrict: boolean;
     announce: boolean;
-    participants: Array<object>;
+    participants: object[];
     ephemeralDuration: number;
     config: {
+        anti: {
+            virtex: boolean;
+            spam: boolean;
+            link: boolean;
+        };
         greeting: {
             active: boolean;
             join: string;
@@ -59,24 +64,4 @@ export interface GroupType {
         };
         nsfw: boolean;
     };
-}
-
-
-
-export interface DatabaseType {
-    config: {
-        db: {
-            name: string;
-            dir: string;
-            file: object;
-        };
-    };
-    auth: AuthenticationState;
-    users: any;
-    groups: any;
-    store: any;
-    exist: (name?: string) => void;
-    create: (name?: string) => void;
-    load: (name?: string) => void;
-    save: (name?: string) => void;
 }

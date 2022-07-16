@@ -8,7 +8,9 @@ const greeting = {
     disable: () => {}
 }
 
-const ConfigTextJoinGreeting = function (text: string, id: string, database: types.DatabaseType) {
+const ConfigTextJoinGreeting = function (
+    text: string, id: string, database: any
+): void {
     database.load();
     
     const group = database.groups[id];
@@ -18,7 +20,9 @@ const ConfigTextJoinGreeting = function (text: string, id: string, database: typ
     database.save();
 }
 
-const ConfigTextLeaveGreeting = function (text: string, id: string, database: types.DatabaseType) {
+const ConfigTextLeaveGreeting = function (
+    text: string, id: string, database: any
+): void {
     database.load();
     
     const group = database.groups[id];
@@ -28,12 +32,14 @@ const ConfigTextLeaveGreeting = function (text: string, id: string, database: ty
     database.save();
 }
 
-const ConfigActivationGreeting = function (active: boolean, id: string, database: types.DatabaseType) {
+const ConfigActivationGreeting = function (
+    active: boolean, id: string, database: any
+): void {
     database.load()
     
     const group = database.groups[id]
     if (active && group.config.greeting.active) throw new Error('This function has been activated')
-    if (!active && !group.config.greeting.active) throw new Error('his function is not active')
+    if (!active && !group.config.greeting.active) throw new Error('This function is not active')
     
     group.config.greeting.active = active
     database.save()
@@ -44,8 +50,38 @@ const nsfw = {
     disable: () => {}
 }
 
-const ConfigActivationNSFW = function (active: boolean, id: string, database: types.DatabaseType) {
+const ConfigActivationNSFW = function (
+    active: boolean, id: string, database: any
+): void {
     
+}
+const anti = {
+    link: {
+        enable: () => {},
+        disable: () => {}
+    },
+    spam: {
+        enable: () => {},
+        disable: () => {}
+    },
+    virtex: {
+        enable: () => {},
+        disable: () => {}
+    }
+}
+
+
+const ConfigActivationAntiVirtex = function (
+    active: boolean, id: string, database: any
+): void {
+    database.load();
+    const group = database.groups[id];
+    if (active && group.config.anti.virtex) throw new Error('This function has been activated')
+    if (!active && !group.config.anti.virtex) throw new Error('This function is not active')
+    
+    group.config.anti.virtex = active
+    database.groups[id] = group;
+    database.save()
 }
 
 export class ConfigGroup {
@@ -63,6 +99,10 @@ export class ConfigGroup {
         disable: () => {}
     };
     
+    antivirtex = anti.virtex
+    antilink = anti.link
+    antispam = anti.spam
+
     constructor(id, database) {
         const db = new Database(database.config.db.name || 'main')
         db.load()
@@ -73,7 +113,7 @@ export class ConfigGroup {
          * @param text - Text about welcome
          * 
          */
-        this.greeting.text.join = function (text: string="") {
+        this.greeting.text.join = function (text: string=""): void {
             if (text == "") {
                 text = "Welcome @user, to @subject!"
             }
@@ -87,7 +127,7 @@ export class ConfigGroup {
          * @param text - Text about leave
          * 
          */
-        this.greeting.text.leave = function (text: string="") {
+        this.greeting.text.leave = function (text: string=""): void {
             if (text == "") {
                 text = "Goodbye @user, from @subject!"
             }
@@ -95,12 +135,20 @@ export class ConfigGroup {
             return ConfigTextLeaveGreeting(text, id, db)
         }
         
-        this.greeting.enable = function () {
+        this.greeting.enable = function (): void {
             return ConfigActivationGreeting(true, id, db)
         }
         
-        this.greeting.disable = function () {
+        this.greeting.disable = function (): void {
             return ConfigActivationGreeting(false, id, db)
+        }
+        
+        this.antivirtex.enable = function (): void {
+            return ConfigActivationAntiVirtex(true, id, db)
+        }
+        
+        this.antivirtex.disable = function (): void {
+            return ConfigActivationAntiVirtex(false, id, db)
         }
     }
 }

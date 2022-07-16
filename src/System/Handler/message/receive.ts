@@ -1,7 +1,7 @@
 import { SimpleChat, SimpleData } from '../../Simpler';
 import { CommandHandler } from '../command';
 import { logger } from '../../../Utils';
-import { GroupHandler } from '..'
+import { AntiHandler ,GroupHandler } from '..'
 
 import chalk from 'chalk';
 
@@ -22,13 +22,20 @@ const ReceiverMessageHandler = async function (
     { messages, type }, client, database
 ): Promise<void> {
     try {
+        //Simpling Chat
         const chat = SimpleChat(messages, client);
         if (!chat.message) return;
         if (chat.key && chat.key.remoteJid == 'status@broadcast') return;
         if (chat.key.fromMe) return;
         
-        GroupHandler(chat.key.remoteJid, client, database)
+        //add additional handler
+        await GroupHandler(chat.key.remoteJid, client, database)
+        
+        //Simpling Data
         const data = SimpleData(chat, database);
+        
+        await AntiHandler(chat, client, { data, database })
+        //Simpling Log
         const fetchLog = function (): string {
             let text = coloringText('"' + data.text.full + '"', 'white');
             text += coloringText(' From: ', 'yellow');
@@ -41,12 +48,16 @@ const ReceiverMessageHandler = async function (
             return text;
         };
         
+        //Read Message
         client.readMessages([chat.key]);
+        
+        //Logging
         if (data.text.command) logger.command(fetchLog());
             else logger.message(fetchLog());
             
         if (database.config.ReadOnly) return;
-
+        
+        //Handler Command
         if (data.text.command) {
             CommandHandler(client, { data, database })
         }

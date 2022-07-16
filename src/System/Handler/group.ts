@@ -39,6 +39,7 @@ const GroupHandler = async function (
         if (database.groups[id]) {
             const Metadata = await fetchMetadata();
             const JSONGroup: GroupType = {
+                ...GROUP,
                 ...database.groups[id],
                 ...Metadata
             } as GroupType;

@@ -55,7 +55,7 @@ const BitrateAudio = {
     "0": "0"
 }
 
-const GetInfo = async function (link): Promise<InfoYTVideo> {
+const getInfo = async function (link): Promise<InfoYTVideo> {
     let TagVideo;
     let TagAudio;
     const InfoVideo = await ytdl.getInfo(link)
@@ -95,7 +95,7 @@ const GetInfo = async function (link): Promise<InfoYTVideo> {
 const mp3 = async function (
     link: string, output?: string
 ): Promise<any> {
-    const InfoVideo = await GetInfo(link);
+    const InfoVideo = await getInfo(link);
     const AudioStream = await fetcher.getStream(InfoVideo.url.audio)
     
     const result = await new Promise(async (res, rej) => {
@@ -159,7 +159,7 @@ const mp4 = async function (link) {
 }
 
 export {
-    GetInfo,
+    getInfo,
     mp3,
     mp4
 }

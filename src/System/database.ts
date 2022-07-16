@@ -2,7 +2,6 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 import { logger } from '../Utils';
-import { DatabaseType } from '../Types'
 import { CONFIG } from '../Defaults'
 
 import {
