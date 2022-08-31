@@ -81,7 +81,7 @@ if (!module.parent) {
     database.load()
     
     if (config.db.name == 'main') {
-        const PATH_CONFIG_JSON = path.resolve(__dirname, '..//config.json')
+        const PATH_CONFIG_JSON = path.resolve(__dirname, '../config.json')
         const MainConfig = JSON.parse(String(fs.existsSync(PATH_CONFIG_JSON) ? fs.readFileSync(PATH_CONFIG_JSON) : "{}")) as any;
         
         database.config = {

@@ -135,7 +135,7 @@ const AntiHandler = async (chat, client, { data, database }) => {
             const information = `> Level Virtex: ${result.level}`
             text = text.replace('%choice%', 'VIRTEX').replace('%info%', information)
             
-            client.sendMessage(data.from, { text }, { quoted: data.chat}).then(v => {
+            client.sendMessage(data.from, { text }, { quoted: data.chat }).then(v => {
                 client.groupParticipantsUpdate(data.from, [data.sender], "remove")
             })
         }

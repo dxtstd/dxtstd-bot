@@ -23,15 +23,17 @@ const MakePathDatabase = function (name?: string) {
     const FileUsersJSON = DirDB + 'users.json'
     const FileGroupsJSON = DirDB + 'groups.json'
     const FileStoreJSON = DirDB + 'store.json'
+    const FileResponseJSON = DirDB + 'respon.json'
     
     return {
         dir: DirDB,
         file: {
             config: FileConfigJSON,
+            store: FileStoreJSON,
+            respon: FileResponJSON,
             auth: FileAuthJSON,
             users: FileUsersJSON,
             groups: FileGroupsJSON,
-            store: FileStoreJSON
         }
     }
 }
@@ -156,13 +158,14 @@ const AutoBackupDatabase = function (this: any, opts: any={}) {
 
 export class Database {
     config = CONFIG;
+    store = {};
+    response = {};
     auth = {
         creds: initAuthCreds(),
         keys: {}
     } as AuthenticationState;
     users = {};
     groups = {};
-    store = {};
     
     declare exist: (name?: string) => void;
     declare create: (name?: string) => void;
@@ -172,7 +175,7 @@ export class Database {
     declare backup: {
         create: (name?: string, opts?: any) => void,
         restore: (name?: string, opts?: any) => void,
-        auto: (opts: any) => void
+        auto: (opts?: any) => void
     };
     
     constructor(name?: string) {

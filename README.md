@@ -1,6 +1,6 @@
 <head>
-    <a href="https://github.com/DentaCH/dxtstd-bot">
-        <img src="https://raw.githubusercontent.com/DentaCH/dxtstd-bot/assets/banner.jpg"> </img>
+    <a href="https://github.com/dxtstd/dxtstd-bot">
+        <img src="https://raw.githubusercontent.com/dxtstd/dxtstd-bot/assets/banner.jpg"> </img>
     </a>
 </head>
 <body>
@@ -16,7 +16,7 @@ if using termux, maybe multiple plugins it's disabled
 ### Install
 
 ```bash
-git clone https://github.com/DentaCH/dxtstd-bot
+git clone https://github.com/dxtstd/dxtstd-bot
 cd dxtstd-bot
 bash install.sh
 ```
@@ -45,7 +45,7 @@ npm start
 --->
 
 
-[![DentaCH](https://github.com/DentaCH.png?size=100)](https://github.com/DentaCH) | [![Fauzan](https://github.com/Fau-Zan.png?size=100)](https://github.com/Fau-Zan) | [![Rizky](https://github.com/Rizxyu.png?size=100)](https://github.com/Rizxyu)
+[![DentaCH](https://github.com/dxtstd.png?size=100)](https://github.com/dxtstd) | [![Fauzan](https://github.com/Fau-Zan.png?size=100)](https://github.com/Fau-Zan) | [![Rizky](https://github.com/Rizxyu.png?size=100)](https://github.com/Rizxyu)
 ----|----|----
 [DentaCH](https://github.com/DentaCH) | [Fauzan](https://github.com/Fau-Zan) | [Rizky](https://github.com/Rizxyu)
 Author/Creator | Contributor | Contributor 2nd

@@ -46,10 +46,10 @@ const GroupHandler = async function (
             database.groups[id] = JSONGroup;
         } else if (!database.groups[id]) {
             const Metadata = await fetchMetadata();
-            const JSONGroup: GroupType = {
-                gid: String(Object.keys(database.groups).length),
+            const JSONGroup: GroupType = {,
                 ...Metadata,
-                ...GROUP
+                ...GROUP,
+                gid: database.groups.length
             } as GroupType;
             database.groups[id] = JSONGroup;
         }

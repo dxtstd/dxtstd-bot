@@ -8,7 +8,7 @@ export async function EventsHandler (client, database, opts: object={}) {
     const { ev, ws } = client;
     
     ev.on('creds.update', (creds) => {
-        console.log(creds)
+        //console.log(creds)
         database.load()
         database.auth = client.authState
         database.save()
@@ -24,17 +24,5 @@ export async function EventsHandler (client, database, opts: object={}) {
     
     ev.on('contacts.update', (contact) => {
         ContactsHandler(contact, database)
-    })
-    
-    ev.on('connection.update', (update) => {
-        if (update.qr) logger.info('Scan this QR!')
-        if (update.connection == 'connecting') logger.info('Connecting to WhatsApp Web...')
-    
-        if (update.connection == 'close') {
-            const statusCode = (update.lastDisconnect?.error as Boom)?.output?.statusCode
-            if (statusCode != 401) {
-                startClient(opts)
-            }
-        }
     })
 }
