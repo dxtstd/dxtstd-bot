@@ -1,6 +1,5 @@
-node_modules
-package-lock.json
 database
-tmp
+node_modules
+lib
 yarn.lock
-yarn-error.log
+package-lock.json

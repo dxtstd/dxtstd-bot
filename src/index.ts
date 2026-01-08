@@ -1,104 +1,64 @@
-import * as path from 'path'
-import * as fs from 'fs'
+import Database from './database.ts';
+import AuthState from './auth.ts';
+import LoggerDefault from './logger.ts';
 
-import { startClient } from './System/client'
-import { logger } from './Utils'
-import { Database } from './System/database'
-import { CONFIG } from './Defaults'
+import * as baileys from 'baileys';
+import pino from 'pino';
+import qrcode from "qrcode-terminal"
 
-const MakeError = function (text) {
-    return new TypeError(text)
-}
+class Bot {
+  public sock: baileys.WASocket;
 
-/**
- * Initialize and run the bot
- * 
- * @param {OptsStartBot} opts - Option to run bot
- */
-const StartBot = function (opts: any={}): any {
-    try {
-        const client = startClient(opts)
-        return client
-    } catch (error) {
-        return {}
-    }
-}
+  public db: Map<string, Database>;
+  public authState: AuthState;
+  public logger: pino.Logger;
 
-const StartBotArgs = function () {
-    const config = CONFIG as any
-    const args = [...process.argv.slice(2)]
-    
-    const isOpts = function (args) {
-        return args.startsWith('--')
-    }
-    
-    let i = 0
-    args.forEach(v => {
-        const opts = v.replace(/--/g, '') 
-        switch (opts) {
-            case 'read-only':
-                logger.info('Enable Read Only (child ts-node)')
-                config.ReadOnly = true;
-                break;
-            case 'qr-image':
-                logger.info('Enable Save QR Image (child ts-node)')
-                config.QRImage = true
-                break
-            case 'prefix':
-                const errorP = 'missing args for "--prefix". require 1 args'
-                if (!args[i + 1]) throw MakeError(errorP)
-                else if (isOpts(args[i + 1])) throw MakeError(errorP);
-                logger.info('Set Prefix to "%s" (child ts-node)', args[i + 1])
-                config.prefix = args[i + 1]
-                break;
-            case 'timezone':
-                const errorTZ = 'missing args for "--timezone". require 1 args'
-                if (!args[i + 1]) throw MakeError(errorTZ)
-                else if (isOpts(args[i + 1])) throw MakeError(errorTZ);
-                logger.info('Set Timezone to "%s" (child ts-node)', args[i + 1])
-                config.timezone = args[i + 1]
-                break;
-            case 'database':
-                const errorDB = 'missing args for "--database". require 1 args'
-                if (!args[i + 1]) throw MakeError(errorDB)
-                else if (isOpts(args[i + 1])) throw MakeError(errorDB);
-                logger.info('Set Database to "%s" (child ts-node)', args[i + 1])
-                config.db.name = args[i + 1]
-                break
-            default:
-                logger.error('Args "%s" unknown!!', opts)
-                process.exit()
-                break
-        } 
-        i ++
-    })
-    return config
-}
+  constructor(opts?) {
+    this.logger = LoggerDefault.child({ system: 'bot' });
+  }
 
-if (!module.parent) {
-    const config = StartBotArgs()
-    const database = new Database(config.db.name)
-    database.load()
-    
-    if (config.db.name == 'main') {
-        const PATH_CONFIG_JSON = path.resolve(__dirname, '../config.json')
-        const MainConfig = JSON.parse(String(fs.existsSync(PATH_CONFIG_JSON) ? fs.readFileSync(PATH_CONFIG_JSON) : "{}")) as any;
-        
-        database.config = {
-            ...database.config,
-            ...config,
-            ...MainConfig
+  async load() {
+    this.authState = new AuthState();
+    this.logger.info('load auth state for baileys...');
+    await this.authState.load();
+  }
+
+  async startConnection() {
+    return this.load().then(async () => {
+      this.sock = baileys.makeWASocket({
+        auth: this.authState.CredsKeysForAuthBaileys().state,
+        version: (await baileys.fetchLatestBaileysVersion()).version,
+        browser: baileys.Browsers.windows('Chrome'),
+        logger: this.logger.child({ system: "bot.sock" }),
+        mobile: false,
+        qrTimeout: 60000,
+        markOnlineOnConnect: true,
+        syncFullHistory: false,
+        shouldSyncHistoryMessage: () => false,
+      });
+
+      this.sock.ev.on("connection.update", async (args) => {
+        const {connection, lastDisconnect, qr } = args
+
+        if (qr) {
+          qrcode.generate(qr, {small: true})
         }
-        database.save()
-    }
-    
-    StartBot({
-        db: database.config.db.name,
-        printQR: true,
-        bind: true
-    })
+
+        if (connection == "close") {
+          const shouldReconnect = (lastDisconnect?.error as any)?.output?.statusCode !== 401
+
+          if (!shouldReconnect) {
+            this.logger.info("session unauthorized (401), close connection...")
+          } else {
+            this.logger.info("close connection...")
+            await this.authState.saveCreds()
+            this.startConnection()
+          }
+        }
+      })
+    });
+  }
 }
 
-export {
-    StartBot
-}
+const bot = new Bot()
+bot.startConnection()
