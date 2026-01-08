@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>testing</title>
+    </head>
+    <body>
+        <canvas style="margin:0;padding:0;position:relative;left:50px;top:50px;" id="imgCanvas" width="250" height="250" onclick="draw(e)"></canvas>
+        <script>
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
+}
+
+function draw(e) {
+    var canvas = document.getElementById("imgCanvas");
+    var context = canvas.getContext("2d");
+    var rect = canvas.getBoundingClientRect();
+    var posx = e.clientX - rect.left;
+    var posy = e.clientY - rect.top;
+
+    context.fillStyle = "#000000";
+    context.beginPath();
+    context.arc(posx, posy, 50, 0, 2 * Math.PI);
+    context.fill();
+}
+
+draw()
+        </script>
+    </body>
+</html>

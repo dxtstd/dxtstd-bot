@@ -1,64 +1,50 @@
-import Database from './database.ts';
-import AuthState from './auth.ts';
-import LoggerDefault from './logger.ts';
+import InitBot from './System/init'
+import { setListener } from './System/Listener'
+import { setHandler } from './System/Handler'
 
-import * as baileys from 'baileys';
-import pino from 'pino';
-import qrcode from "qrcode-terminal"
+import { logger } from './Utils'
 
-class Bot {
-  public sock: baileys.WASocket;
+import { Boom } from '@hapi/boom'
+import { useMultiFileAuthState } from '@adiwajshing/baileys'
 
-  public db: Map<string, Database>;
-  public authState: AuthState;
-  public logger: pino.Logger;
-
-  constructor(opts?) {
-    this.logger = LoggerDefault.child({ system: 'bot' });
-  }
-
-  async load() {
-    this.authState = new AuthState();
-    this.logger.info('load auth state for baileys...');
-    await this.authState.load();
-  }
-
-  async startConnection() {
-    return this.load().then(async () => {
-      this.sock = baileys.makeWASocket({
-        auth: this.authState.CredsKeysForAuthBaileys().state,
-        version: (await baileys.fetchLatestBaileysVersion()).version,
-        browser: baileys.Browsers.windows('Chrome'),
-        logger: this.logger.child({ system: "bot.sock" }),
-        mobile: false,
-        qrTimeout: 60000,
-        markOnlineOnConnect: true,
-        syncFullHistory: false,
-        shouldSyncHistoryMessage: () => false,
-      });
-
-      this.sock.ev.on("connection.update", async (args) => {
-        const {connection, lastDisconnect, qr } = args
-
-        if (qr) {
-          qrcode.generate(qr, {small: true})
-        }
-
-        if (connection == "close") {
-          const shouldReconnect = (lastDisconnect?.error as any)?.output?.statusCode !== 401
-
-          if (!shouldReconnect) {
-            this.logger.info("session unauthorized (401), close connection...")
-          } else {
-            this.logger.info("close connection...")
-            await this.authState.saveCreds()
-            this.startConnection()
-          }
-        }
-      })
-    });
-  }
+async function sleep(ms: number): Promise<unknown> { 
+    return await new Promise((res) => setTimeout(res, ms))
 }
 
-const bot = new Bot()
-bot.startConnection()
+const start = async function () {
+    const config = {}
+    const bot = InitBot()
+    
+    bot.database.store.readFromFile(bot.database.config.db.file.store)
+    bot.database.store.bind(bot.sock.ev)
+    async function storeLoop(this) {
+        var current = 0
+        var target = 60;
+        do {
+            await sleep(1000)
+            current ++
+            if (current >= target) {
+                bot.database.store.writeToFile(bot.database.config.db.file.store)
+                storeLoop()
+            } 
+        } while (!(current >= target))
+    }
+    
+    //Set Listener for bot.sock.ev
+    setListener(bot)
+    //Set Listener for bot.events
+    setHandler(bot)
+
+    bot.sock.ev.on('connection.update', (update) => {
+        if (update.connection == 'close') {
+            const statusCode = (update.lastDisconnect?.error as Boom)?.output?.statusCode
+            if (statusCode != 401) {
+                start()
+            }
+        }
+    })
+    //storeLoop()
+    return bot
+}
+//console.log('STARTING...')
+start()

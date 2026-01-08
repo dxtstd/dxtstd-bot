@@ -1,0 +1,23 @@
+{
+    "owner": {  
+        "profile": {
+            "name": "DentaCH"
+        },
+        "phone": "6285240857245",
+        "donate": {
+            "saweria": "https://saweria.co/dentaft",
+            "paypal": "https://paypal.me/dentaft"
+        }
+    },
+    "administrator": {
+        "6285240857245": true,
+        "6281242860439": true,
+        "62812428604397": true,
+        "62812428604398": true,
+        "62812428604399": true,
+        "62889838042451": true
+    },
+    "timezone": "Asia/Makassar",
+    "website": "http://",
+    "prefix": ["/"]
+}

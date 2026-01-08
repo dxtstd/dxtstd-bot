@@ -1,5 +1,6 @@
+AUTH_DXTSTD
 database
 node_modules
-lib
+package_lock.jdin
 yarn.lock
-package-lock.json
+testing/frames

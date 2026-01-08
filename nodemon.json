@@ -1,0 +1,5 @@
+{
+    "verbose": false,
+    "ext": "ts",
+    "ignore": [".git", "node_modules", "database", "tmp", "assets"]
+}
