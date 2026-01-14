@@ -1,0 +1,16 @@
+{
+    "owner": {  
+        "profile": {
+            "name": "dxtstd"
+        },
+        "phone": "6281242860439",
+        "donate": {
+            "saweria": "https://saweria.co/dentaft",
+            "paypal": "https://paypal.me/dentaft"
+        }
+    },
+    "administrator": ["6281242860439", "6285824304273", "6285240857245:24", "6281242860439:31"],
+    "timezone": "Asia/Makassar",
+    "website": "http://",
+    "prefix": ["/"]
+}
